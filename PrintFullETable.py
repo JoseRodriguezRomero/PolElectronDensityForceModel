@@ -1,0 +1,73 @@
+fileID = open("AtomsCoeffs_FullE.txt")
+
+spins = [2,1,2,1,2,3,4,3,2,1,2,1,2,3,4,3,2,1]
+
+lines = fileID.readlines()
+for i in range(18):
+    aux_line = lines[1 + i*3].split()
+    aux_str = "{:5}".format(aux_line[0])
+    aux_str = aux_str + " & " + "{:3d}".format(spins[i])
+    aux_str = aux_str + " & " + "{:3}".format(aux_line[1])
+    aux_str = aux_str + " & " + "{:18.10f}".format(float(aux_line[3]))
+    aux_str = aux_str + " & " + "{:18.10f}".format(float(aux_line[4]))
+    print(aux_str + r" \\")
+    
+    aux_str = "{:5}".format(" ")
+    aux_str = aux_str + " & " + "{:3}".format(" ")
+    aux_str = aux_str + " & " + "{:3}".format(" ")
+    aux_str = aux_str + " & " + "{:18.10f}".format(float(aux_line[5]))
+    aux_str = aux_str + " & " + "{:18.10f}".format(float(aux_line[6]))
+    print(aux_str + r" \\")
+    
+    aux_str = "{:5}".format(" ")
+    aux_str = aux_str + " & " + "{:3}".format(" ")
+    aux_str = aux_str + " & " + "{:3}".format(" ")
+    aux_str = aux_str + " & " + "{:18.10f}".format(float(aux_line[7]))
+    aux_str = aux_str + " & " + "{:18.10f}".format(float(aux_line[8]))
+    print(aux_str + r" \\")
+    
+    aux_line = lines[1+i*3+1].split()
+    aux_str = "{:5}".format(" ")
+    aux_str = aux_str + " & " + "{:3}".format(" ")
+    aux_str = aux_str + " & " + "{:3}".format(" ")
+    aux_str = aux_str + " & " + "{:18.10f}".format(float(aux_line[0]))
+    aux_str = aux_str + " & " + "{:18.10f}".format(float(aux_line[1]))
+    print(aux_str + r" \\")
+    
+    aux_str = "{:5}".format(" ")
+    aux_str = aux_str + " & " + "{:3}".format(" ")
+    aux_str = aux_str + " & " + "{:3}".format(" ")
+    aux_str = aux_str + " & " + "{:18.10f}".format(float(aux_line[2]))
+    aux_str = aux_str + " & " + "{:18.10f}".format(float(aux_line[3]))
+    print(aux_str + r" \\")
+    
+    aux_str = "{:5}".format(" ")
+    aux_str = aux_str + " & " + "{:3}".format(" ")
+    aux_str = aux_str + " & " + "{:3}".format(" ")
+    aux_str = aux_str + " & " + "{:18.10f}".format(float(aux_line[4]))
+    aux_str = aux_str + " & " + "{:18.10f}".format(float(aux_line[5]))
+    print(aux_str + r" \\")
+    
+    aux_line = lines[1+i*3+2].split()
+    aux_str = "{:5}".format(" ")
+    aux_str = aux_str + " & " + "{:3}".format(" ")
+    aux_str = aux_str + " & " + "{:3}".format(" ")
+    aux_str = aux_str + " & " + "{:18.10f}".format(float(aux_line[0]))
+    aux_str = aux_str + " & " + "{:18.10f}".format(float(aux_line[1]))
+    print(aux_str + r" \\")
+    
+    aux_str = "{:5}".format(" ")
+    aux_str = aux_str + " & " + "{:3}".format(" ")
+    aux_str = aux_str + " & " + "{:3}".format(" ")
+    aux_str = aux_str + " & " + "{:18.10f}".format(float(aux_line[2]))
+    aux_str = aux_str + " & " + "{:18.10f}".format(float(aux_line[3]))
+    print(aux_str + r" \\")
+    
+    aux_str = "{:5}".format(" ")
+    aux_str = aux_str + " & " + "{:3}".format(" ")
+    aux_str = aux_str + " & " + "{:3}".format(" ")
+    aux_str = aux_str + " & " + "{:18.10f}".format(float(aux_line[4]))
+    aux_str = aux_str + " & " + "{:18.10f}".format(float(aux_line[5]))
+    print(aux_str + r" \\")
+
+fileID.close()
