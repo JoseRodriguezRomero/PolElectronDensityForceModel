@@ -4,7 +4,7 @@ for MOLEC in CO2
 do
     # MOLEC + MOLEC Energies
     FOLDER="$MOLEC+$MOLEC/"
-    METHOD="MB-Pol"
+    METHOD="MB-nrg"
     
     cd $FOLDER
     python CreateInputFile.py

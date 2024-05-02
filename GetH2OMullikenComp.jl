@@ -222,7 +222,7 @@ ECP_order = ceil(Int,length(model1_xc_coeffs_ECP)/4.0) - 1;
 FullE_order = ceil(Int,length(model1_xc_coeffs_FullE)/4.0) - 1;
 
 bond_θ = -(π/2.0)*(13.0/25.0);
-str_react_coord = "OH";
+str_react_coord = "OO";
 
 for i in 0:199
     if str_react_coord == "OH"
@@ -352,14 +352,20 @@ PGFPlotsX.CUSTOM_PREAMBLE = [PGFPlotsX.CUSTOM_PREAMBLE; "\\pgfplotsset{legend im
 # PGFPlotsX.CUSTOM_PREAMBLE = [PGFPlotsX.CUSTOM_PREAMBLE; "\\usepackage[fontsize=10pt]{fontsize}"];
 # PGFPlotsX.CUSTOM_PREAMBLE = [PGFPlotsX.CUSTOM_PREAMBLE; "\\pgfplotsset{legend image code/.code={ \\draw [#1] (0cm,-0.1cm) rectangle (0.6cm,0.1cm);},}"];
 
-model_ecp_charges_15 = ChargesAtDistanceOH_ECP(react_coord[15]);
-model_fulle_charges_15 = ChargesAtDistanceOH_FullE(react_coord[15]);
+model_OH_ecp_charges_15 = ChargesAtDistanceOH_ECP(react_coord[15]);
+model_OH_fulle_charges_15 = ChargesAtDistanceOH_FullE(react_coord[15]);
+model_OO_ecp_charges_5 = ChargesAtDistanceOO_ECP(react_coord[5]);
+model_OO_fulle_charges_5 = ChargesAtDistanceOO_FullE(react_coord[5]);
 
-model_ecp_charges_30 = ChargesAtDistanceOH_ECP(react_coord[30]);
-model_fulle_charges_30 = ChargesAtDistanceOH_FullE(react_coord[30]);
+model_OH_ecp_charges_30 = ChargesAtDistanceOH_ECP(react_coord[30]);
+model_OH_fulle_charges_30 = ChargesAtDistanceOH_FullE(react_coord[30]);
+model_OO_ecp_charges_25 = ChargesAtDistanceOO_ECP(react_coord[25]);
+model_OO_fulle_charges_25 = ChargesAtDistanceOO_FullE(react_coord[25]);
 
-model_ecp_charges_60 = ChargesAtDistanceOH_ECP(react_coord[60]);
-model_fulle_charges_60 = ChargesAtDistanceOH_FullE(react_coord[60]);
+model_OH_ecp_charges_60 = ChargesAtDistanceOH_ECP(react_coord[60]);
+model_OH_fulle_charges_60 = ChargesAtDistanceOH_FullE(react_coord[60]);
+model_OO_ecp_charges_55 = ChargesAtDistanceOO_ECP(react_coord[55]);
+model_OO_fulle_charges_55 = ChargesAtDistanceOO_FullE(react_coord[55]);
 
 if str_react_coord == "OH"
     F1 = @pgf Axis(
@@ -382,7 +388,7 @@ if str_react_coord == "OH"
                 no_marks,
             },
             Coordinates([0],[0]),
-            "node[] at (0.5,0.5) {\\includegraphics{/Users/joseantoniorodriguesromero/Documents/GitHub/PolarizedElectronDensityForceModel/labeled_H2O_OH_diag.pdf}}"
+            "node[] at (0.5,0.5) {\\includegraphics{/Users/joseantoniorodriguesromero/Documents/GitHub/PolElectronDensityForceModel/labeled_H2O_OH_diag.pdf}}"
         ),
     )
     fp1 = @pgf Axis(
@@ -391,22 +397,22 @@ if str_react_coord == "OH"
             "bar width = 5.5pt",
             legend_style =
             {
-                at = Coordinate(1.0 + (30/230)/2.0, 2.7),
+                at = Coordinate(1.0 + (30/230)/2.0, 2.5),
                 anchor = "north",
                 anchor = "center",
                 legend_columns = 2
             },
-            ylabel = raw"$\rho$",
-            ymin = -1.0,
-            ymax = 0.5,
+            ylabel = raw"$\left \lvert \Delta q \right \rvert$",
+            ymin = 0.0,
+            ymax = 0.2,
             xmin = 0.25,
             xmax = 6.75,
             width = 230, 
             height = 85,
             xtick = "1,2,3,4,5,6",
             xticklabels = "\\empty",
-            ytick = "-1.0,-0.5,0.0,0.5",
-            yticklabels = L"$-1.0$,$-0.5$,$0.0$,$0.5$",
+            ytick = "0.0,0.1,0.2",
+            yticklabels = L"$0.0$,$0.1$,$0.2$",
             "xtick align = inside",
             "grid = both",
             "grid style={line width=.1pt, draw=gray!10},major grid style={line width=.2pt,draw=gray!25}",
@@ -415,12 +421,12 @@ if str_react_coord == "OH"
             {fill = theme_palette(:auto)[1]},
             Coordinates(
                 [
-                    (1, fulle_mull_charges[15,1]), 
-                    (2, fulle_mull_charges[15,2]), 
-                    (3, fulle_mull_charges[15,3]), 
-                    (4, fulle_mull_charges[15,4]), 
-                    (5, fulle_mull_charges[15,5]), 
-                    (6, fulle_mull_charges[15,6])  
+                    (1, abs(fulle_mull_charges[15,1] - model_OH_fulle_charges_15[1])), 
+                    (2, abs(fulle_mull_charges[15,2] - model_OH_fulle_charges_15[2])), 
+                    (3, abs(fulle_mull_charges[15,3] - model_OH_fulle_charges_15[3])), 
+                    (4, abs(fulle_mull_charges[15,4] - model_OH_fulle_charges_15[4])), 
+                    (5, abs(fulle_mull_charges[15,5] - model_OH_fulle_charges_15[5])), 
+                    (6, abs(fulle_mull_charges[15,6] - model_OH_fulle_charges_15[6]))  
                 ]
             )
         ),
@@ -428,46 +434,18 @@ if str_react_coord == "OH"
             {fill = theme_palette(:auto)[2]},
             Coordinates(
                 [
-                    (1, model_fulle_charges_15[1]), 
-                    (2, model_fulle_charges_15[2]), 
-                    (3, model_fulle_charges_15[3]), 
-                    (4, model_fulle_charges_15[4]), 
-                    (5, model_fulle_charges_15[5]), 
-                    (6, model_fulle_charges_15[6])  
-                ]
-            )
-        ),
-        Plot(
-            {fill = theme_palette(:auto)[3]},
-            Coordinates(
-                [
-                    (1, ecp_mull_charges[15,1]), 
-                    (2, ecp_mull_charges[15,2]), 
-                    (3, ecp_mull_charges[15,3]), 
-                    (4, ecp_mull_charges[15,4]), 
-                    (5, ecp_mull_charges[15,5]), 
-                    (6, ecp_mull_charges[15,6])  
-                ]
-            )
-        ),
-        Plot(
-            {fill = theme_palette(:auto)[4]},
-            Coordinates(
-                [
-                    (1, model_ecp_charges_15[1]), 
-                    (2, model_ecp_charges_15[2]), 
-                    (3, model_ecp_charges_15[3]), 
-                    (4, model_ecp_charges_15[4]), 
-                    (5, model_ecp_charges_15[5]), 
-                    (6, model_ecp_charges_15[6])  
+                    (1, abs(ecp_mull_charges[15,1] - model_OH_ecp_charges_15[1])), 
+                    (2, abs(ecp_mull_charges[15,2] - model_OH_ecp_charges_15[2])), 
+                    (3, abs(ecp_mull_charges[15,3] - model_OH_ecp_charges_15[3])), 
+                    (4, abs(ecp_mull_charges[15,4] - model_OH_ecp_charges_15[4])), 
+                    (5, abs(ecp_mull_charges[15,5] - model_OH_ecp_charges_15[5])), 
+                    (6, abs(ecp_mull_charges[15,6] - model_OH_ecp_charges_15[6]))  
                 ]
             ),
-            "node[] at (5.75,-0.65) {\\fontsize{8pt}{8pt}\\selectfont \$\\Delta L = "*string(round(react_coord[15],digits=3))*"\\ \\mathring{\\mathrm{A}}\$}",
+            "node[] at (5.75,0.15) {\\fontsize{8pt}{8pt}\\selectfont \$\\Delta L = "*string(round(react_coord[15],digits=3))*"\\ \\mathring{\\mathrm{A}}\$}",
         ),
-        LegendEntry({anchor = "west"},L"\fontsize{8pt}{8pt}\selectfont $\mathrm{CCSD(T)/cc\text{-}pVTZ}$"),
-        LegendEntry({anchor = "west"},L"\fontsize{8pt}{8pt}\selectfont $\mathrm{This \ Work \ (Full \ E. \ fit)}$"),
-        LegendEntry({anchor = "west"},L"\fontsize{8pt}{8pt}\selectfont $\mathrm{CCSD(T)/CEP\text{-}31G}$ \qquad"),
-        LegendEntry({anchor = "west"},L"\fontsize{8pt}{8pt}\selectfont $\mathrm{This \ Work \ (ECP \ fit)}$"),
+        LegendEntry({anchor = "west"},L"\fontsize{8pt}{8pt}\selectfont $\mathrm{Full \ electron \ variant \hspace{0.5cm}}$"),
+        LegendEntry({anchor = "west"},L"\fontsize{8pt}{8pt}\selectfont $\mathrm{ECP \ variant}$"),
         "\\pgfplotsset{legend image code/.code={ \\draw [#1] (0cm,-0.1cm) rectangle (0.6cm,0.1cm);},}",
     )
 
@@ -475,17 +453,17 @@ if str_react_coord == "OH"
         {
             ybar = 0,
             "bar width = 5.5pt",
-            ylabel = raw"$\rho$",
-            ymin = -1.0,
-            ymax = 0.5,
+            ylabel = raw"$\left \lvert \Delta q \right \rvert$",
+            ymin = 0.0,
+            ymax = 0.2,
             xmin = 0.25,
             xmax = 6.75,
             width = 230, 
             height = 85,
             xtick = "1,2,3,4,5,6",
             xticklabels = "\\empty",
-            ytick = "-1.0,-0.5,0.0,0.5",
-            yticklabels = L"$-1.0$,$-0.5$,$0.0$,$0.5$",
+            ytick = "0.0,0.1,0.2",
+            yticklabels = L"$0.0$,$0.1$,$0.2$",
             "xtick align = inside",
             "grid = both",
             "grid style={line width=.1pt, draw=gray!10},major grid style={line width=.2pt,draw=gray!25}",
@@ -494,12 +472,12 @@ if str_react_coord == "OH"
             {fill = theme_palette(:auto)[1]},
             Coordinates(
                 [
-                    (1, fulle_mull_charges[30,1]), 
-                    (2, fulle_mull_charges[30,2]), 
-                    (3, fulle_mull_charges[30,3]), 
-                    (4, fulle_mull_charges[30,4]), 
-                    (5, fulle_mull_charges[30,5]), 
-                    (6, fulle_mull_charges[30,6])  
+                    (1, abs(fulle_mull_charges[30,1] - model_OH_fulle_charges_30[1])), 
+                    (2, abs(fulle_mull_charges[30,2] - model_OH_fulle_charges_30[2])), 
+                    (3, abs(fulle_mull_charges[30,3] - model_OH_fulle_charges_30[3])), 
+                    (4, abs(fulle_mull_charges[30,4] - model_OH_fulle_charges_30[4])), 
+                    (5, abs(fulle_mull_charges[30,5] - model_OH_fulle_charges_30[5])), 
+                    (6, abs(fulle_mull_charges[30,6] - model_OH_fulle_charges_30[6]))  
                 ]
             )
         ),
@@ -507,60 +485,34 @@ if str_react_coord == "OH"
             {fill = theme_palette(:auto)[2]},
             Coordinates(
                 [
-                    (1, model_fulle_charges_30[1]), 
-                    (2, model_fulle_charges_30[2]), 
-                    (3, model_fulle_charges_30[3]), 
-                    (4, model_fulle_charges_30[4]), 
-                    (5, model_fulle_charges_30[5]), 
-                    (6, model_fulle_charges_30[6])  
-                ]
-            )
-        ),
-        Plot(
-            {fill = theme_palette(:auto)[3]},
-            Coordinates(
-                [
-                    (1, ecp_mull_charges[30,1]), 
-                    (2, ecp_mull_charges[30,2]), 
-                    (3, ecp_mull_charges[30,3]), 
-                    (4, ecp_mull_charges[30,4]), 
-                    (5, ecp_mull_charges[30,5]), 
-                    (6, ecp_mull_charges[30,6])  
-                ]
-            )
-        ),
-        Plot(
-            {fill = theme_palette(:auto)[4]},
-            Coordinates(
-                [
-                    (1, model_ecp_charges_30[1]), 
-                    (2, model_ecp_charges_30[2]), 
-                    (3, model_ecp_charges_30[3]), 
-                    (4, model_ecp_charges_30[4]), 
-                    (5, model_ecp_charges_30[5]), 
-                    (6, model_ecp_charges_30[6])  
+                    (1, abs(ecp_mull_charges[30,1] - model_OH_ecp_charges_30[1])), 
+                    (2, abs(ecp_mull_charges[30,2] - model_OH_ecp_charges_30[2])), 
+                    (3, abs(ecp_mull_charges[30,3] - model_OH_ecp_charges_30[3])), 
+                    (4, abs(ecp_mull_charges[30,4] - model_OH_ecp_charges_30[4])), 
+                    (5, abs(ecp_mull_charges[30,5] - model_OH_ecp_charges_30[5])), 
+                    (6, abs(ecp_mull_charges[30,6] - model_OH_ecp_charges_30[6]))  
                 ]
             ),
-            "node[] at (5.75,-0.65) {\\fontsize{8pt}{8pt}\\selectfont \$\\Delta L = "*string(round(react_coord[30],digits=3))*"\\ \\mathring{\\mathrm{A}}\$}",
-        )
+            "node[] at (5.75,0.15) {\\fontsize{8pt}{8pt}\\selectfont \$\\Delta L = "*string(round(react_coord[30],digits=3))*"\\ \\mathring{\\mathrm{A}}\$}",
+        ),
     )
 
     fp3 = @pgf Axis(
         {
             ybar = 0,
             "bar width = 5.5pt",
-            ylabel = raw"$\rho$",
+            ylabel = raw"$\left \lvert \Delta q \right \rvert$",
             xlabel = L"$\mathrm{Atom \ Number}$",
-            ymin = -1.0,
-            ymax = 0.5,
+            ymin = 0.0,
+            ymax = 0.2,
             xmin = 0.25,
             xmax = 6.75,
             width = 230, 
             height = 85,
             xtick = "1,2,3,4,5,6",
             xticklabels =  L"$1$,$2$,$3$,$4$,$5$,$6$",
-            ytick = "-1.0,-0.5,0.0,0.5",
-            yticklabels = L"$-1.0$,$-0.5$,$0.0$,$0.5$",
+            ytick = "0.0,0.1,0.2",
+            yticklabels = L"$0.0$,$0.1$,$0.2$",
             "xtick align = inside",
             "grid = both",
             "grid style={line width=.1pt, draw=gray!10},major grid style={line width=.2pt,draw=gray!25}",
@@ -569,12 +521,12 @@ if str_react_coord == "OH"
             {fill = theme_palette(:auto)[1]},
             Coordinates(
                 [
-                    (1, fulle_mull_charges[60,1]), 
-                    (2, fulle_mull_charges[60,2]), 
-                    (3, fulle_mull_charges[60,3]), 
-                    (4, fulle_mull_charges[60,4]), 
-                    (5, fulle_mull_charges[60,5]), 
-                    (6, fulle_mull_charges[60,6])  
+                    (1, abs(fulle_mull_charges[60,1] - model_OH_fulle_charges_60[1])), 
+                    (2, abs(fulle_mull_charges[60,2] - model_OH_fulle_charges_60[2])), 
+                    (3, abs(fulle_mull_charges[60,3] - model_OH_fulle_charges_60[3])), 
+                    (4, abs(fulle_mull_charges[60,4] - model_OH_fulle_charges_60[4])), 
+                    (5, abs(fulle_mull_charges[60,5] - model_OH_fulle_charges_60[5])), 
+                    (6, abs(fulle_mull_charges[60,6] - model_OH_fulle_charges_60[6]))  
                 ]
             )
         ),
@@ -582,42 +534,16 @@ if str_react_coord == "OH"
             {fill = theme_palette(:auto)[2]},
             Coordinates(
                 [
-                    (1, model_fulle_charges_60[1]), 
-                    (2, model_fulle_charges_60[2]), 
-                    (3, model_fulle_charges_60[3]), 
-                    (4, model_fulle_charges_60[4]), 
-                    (5, model_fulle_charges_60[5]), 
-                    (6, model_fulle_charges_60[6])  
-                ]
-            )
-        ),
-        Plot(
-            {fill = theme_palette(:auto)[3]},
-            Coordinates(
-                [
-                    (1, ecp_mull_charges[60,1]), 
-                    (2, ecp_mull_charges[60,2]), 
-                    (3, ecp_mull_charges[60,3]), 
-                    (4, ecp_mull_charges[60,4]), 
-                    (5, ecp_mull_charges[60,5]), 
-                    (6, ecp_mull_charges[60,6])  
-                ]
-            )
-        ),
-        Plot(
-            {fill = theme_palette(:auto)[4]},
-            Coordinates(
-                [
-                    (1, model_ecp_charges_60[1]), 
-                    (2, model_ecp_charges_60[2]), 
-                    (3, model_ecp_charges_60[3]), 
-                    (4, model_ecp_charges_60[4]), 
-                    (5, model_ecp_charges_60[5]), 
-                    (6, model_ecp_charges_60[6])  
+                    (1, abs(ecp_mull_charges[60,1] - model_OH_ecp_charges_60[1])), 
+                    (2, abs(ecp_mull_charges[60,2] - model_OH_ecp_charges_60[2])), 
+                    (3, abs(ecp_mull_charges[60,3] - model_OH_ecp_charges_60[3])), 
+                    (4, abs(ecp_mull_charges[60,4] - model_OH_ecp_charges_60[4])), 
+                    (5, abs(ecp_mull_charges[60,5] - model_OH_ecp_charges_60[5])), 
+                    (6, abs(ecp_mull_charges[60,6] - model_OH_ecp_charges_60[6]))  
                 ]
             ),
-            "node[] at (5.75,-0.65) {\\fontsize{8pt}{8pt}\\selectfont \$\\Delta L = "*string(round(react_coord[60],digits=3))*"\\ \\mathring{\\mathrm{A}}\$}",
-        )
+            "node[] at (5.75,0.15) {\\fontsize{8pt}{8pt}\\selectfont \$\\Delta L = "*string(round(react_coord[60],digits=3))*"\\ \\mathring{\\mathrm{A}}\$}",
+        ),
     )
 else
     F2 = @pgf Axis(
@@ -640,7 +566,7 @@ else
                 no_marks,
             },
             Coordinates([0],[0]),
-            "node[] at (0.5,0.5) {\\includegraphics{/Users/joseantoniorodriguesromero/Documents/GitHub/PolarizedElectronDensityForceModel/labeled_H2O_OO_diag.pdf}}"
+            "node[] at (0.5,0.5) {\\includegraphics{/Users/joseantoniorodriguesromero/Documents/GitHub/PolElectronDensityForceModel/labeled_H2O_OO_diag.pdf}}"
         ),
     )
     fg1 = @pgf Axis(
@@ -653,15 +579,15 @@ else
                 anchor = "north",
                 legend_columns = 2
             },
-            ymin = -1.0,
-            ymax = 0.5,
+            ymin = 0.0,
+            ymax = 0.2,
             xmin = 0.25,
             xmax = 6.75,
             width = 230, 
             height = 85,
             xtick = "1,2,3,4,5,6",
             xticklabels = "\\empty",
-            ytick = "-1.0,-0.5,0.0,0.5",
+            ytick = "0.0,0.1,0.2",
             yticklabels = "\\empty",
             "xtick align = inside",
             "grid = both",
@@ -671,12 +597,12 @@ else
             {fill = theme_palette(:auto)[1]},
             Coordinates(
                 [
-                    (1, fulle_mull_charges[15,1]), 
-                    (2, fulle_mull_charges[15,2]), 
-                    (3, fulle_mull_charges[15,3]), 
-                    (4, fulle_mull_charges[15,4]), 
-                    (5, fulle_mull_charges[15,5]), 
-                    (6, fulle_mull_charges[15,6])  
+                    (1, abs(fulle_mull_charges[5,1] - model_OO_fulle_charges_5[1])), 
+                    (2, abs(fulle_mull_charges[5,2] - model_OO_fulle_charges_5[2])), 
+                    (3, abs(fulle_mull_charges[5,3] - model_OO_fulle_charges_5[3])), 
+                    (4, abs(fulle_mull_charges[5,4] - model_OO_fulle_charges_5[4])), 
+                    (5, abs(fulle_mull_charges[5,5] - model_OO_fulle_charges_5[5])), 
+                    (6, abs(fulle_mull_charges[5,6] - model_OO_fulle_charges_5[6]))  
                 ]
             )
         ),
@@ -684,41 +610,15 @@ else
             {fill = theme_palette(:auto)[2]},
             Coordinates(
                 [
-                    (1, model_fulle_charges_15[1]), 
-                    (2, model_fulle_charges_15[2]), 
-                    (3, model_fulle_charges_15[3]), 
-                    (4, model_fulle_charges_15[4]), 
-                    (5, model_fulle_charges_15[5]), 
-                    (6, model_fulle_charges_15[6])  
-                ]
-            )
-        ),
-        Plot(
-            {fill = theme_palette(:auto)[3]},
-            Coordinates(
-                [
-                    (1, ecp_mull_charges[15,1]), 
-                    (2, ecp_mull_charges[15,2]), 
-                    (3, ecp_mull_charges[15,3]), 
-                    (4, ecp_mull_charges[15,4]), 
-                    (5, ecp_mull_charges[15,5]), 
-                    (6, ecp_mull_charges[15,6])  
-                ]
-            )
-        ),
-        Plot(
-            {fill = theme_palette(:auto)[4]},
-            Coordinates(
-                [
-                    (1, model_ecp_charges_15[1]), 
-                    (2, model_ecp_charges_15[2]), 
-                    (3, model_ecp_charges_15[3]), 
-                    (4, model_ecp_charges_15[4]), 
-                    (5, model_ecp_charges_15[5]), 
-                    (6, model_ecp_charges_15[6])  
+                    (1, abs(ecp_mull_charges[5,1] - model_OO_ecp_charges_5[1])), 
+                    (2, abs(ecp_mull_charges[5,2] - model_OO_ecp_charges_5[2])), 
+                    (3, abs(ecp_mull_charges[5,3] - model_OO_ecp_charges_5[3])), 
+                    (4, abs(ecp_mull_charges[5,4] - model_OO_ecp_charges_5[4])), 
+                    (5, abs(ecp_mull_charges[5,5] - model_OO_ecp_charges_5[5])), 
+                    (6, abs(ecp_mull_charges[5,6] - model_OO_ecp_charges_5[6]))  
                 ]
             ),
-            "node[] at (5.75,-0.65) {\\fontsize{8pt}{8pt}\\selectfont \$\\Delta L = "*string(round(react_coord[15],digits=3))*"\\ \\mathring{\\mathrm{A}}\$}",
+            "node[] at (5.75,0.15) {\\fontsize{8pt}{8pt}\\selectfont \$\\Delta L = "*string(round(react_coord[5],digits=3))*"\\ \\mathring{\\mathrm{A}}\$}",
         ),
         # LegendEntry({anchor = "west"},L"\fontsize{8pt}{8pt}\selectfont $\mathrm{CCSD(T)/cc\text{-}pVTZ}$"),
         # LegendEntry({anchor = "west"},L"\fontsize{8pt}{8pt}\selectfont $\mathrm{This \ Work \ (Full \ E. \ fit)}$"),
@@ -731,15 +631,15 @@ else
         {
             ybar = 0,
             "bar width = 5.5pt",
-            ymin = -1.0,
-            ymax = 0.5,
+            ymin = 0.0,
+            ymax = 0.2,
             xmin = 0.25,
             xmax = 6.75,
             width = 230, 
             height = 85,
             xtick = "1,2,3,4,5,6",
             xticklabels = "\\empty",
-            ytick = "-1.0,-0.5,0.0,0.5",
+            ytick = "0.0,0.1,0.2",
             yticklabels = "\\empty",
             "xtick align = inside",
             "grid = both",
@@ -749,12 +649,12 @@ else
             {fill = theme_palette(:auto)[1]},
             Coordinates(
                 [
-                    (1, fulle_mull_charges[30,1]), 
-                    (2, fulle_mull_charges[30,2]), 
-                    (3, fulle_mull_charges[30,3]), 
-                    (4, fulle_mull_charges[30,4]), 
-                    (5, fulle_mull_charges[30,5]), 
-                    (6, fulle_mull_charges[30,6])  
+                    (1, abs(fulle_mull_charges[25,1] - model_OO_fulle_charges_25[1])), 
+                    (2, abs(fulle_mull_charges[25,2] - model_OO_fulle_charges_25[2])), 
+                    (3, abs(fulle_mull_charges[25,3] - model_OO_fulle_charges_25[3])), 
+                    (4, abs(fulle_mull_charges[25,4] - model_OO_fulle_charges_25[4])), 
+                    (5, abs(fulle_mull_charges[25,5] - model_OO_fulle_charges_25[5])), 
+                    (6, abs(fulle_mull_charges[25,6] - model_OO_fulle_charges_25[6]))  
                 ]
             )
         ),
@@ -762,41 +662,15 @@ else
             {fill = theme_palette(:auto)[2]},
             Coordinates(
                 [
-                    (1, model_fulle_charges_30[1]), 
-                    (2, model_fulle_charges_30[2]), 
-                    (3, model_fulle_charges_30[3]), 
-                    (4, model_fulle_charges_30[4]), 
-                    (5, model_fulle_charges_30[5]), 
-                    (6, model_fulle_charges_30[6])  
-                ]
-            )
-        ),
-        Plot(
-            {fill = theme_palette(:auto)[3]},
-            Coordinates(
-                [
-                    (1, ecp_mull_charges[30,1]), 
-                    (2, ecp_mull_charges[30,2]), 
-                    (3, ecp_mull_charges[30,3]), 
-                    (4, ecp_mull_charges[30,4]), 
-                    (5, ecp_mull_charges[30,5]), 
-                    (6, ecp_mull_charges[30,6])  
-                ]
-            )
-        ),
-        Plot(
-            {fill = theme_palette(:auto)[4]},
-            Coordinates(
-                [
-                    (1, model_ecp_charges_30[1]), 
-                    (2, model_ecp_charges_30[2]), 
-                    (3, model_ecp_charges_30[3]), 
-                    (4, model_ecp_charges_30[4]), 
-                    (5, model_ecp_charges_30[5]), 
-                    (6, model_ecp_charges_30[6])  
+                    (1, abs(ecp_mull_charges[25,1] - model_OO_ecp_charges_25[1])), 
+                    (2, abs(ecp_mull_charges[25,2] - model_OO_ecp_charges_25[2])), 
+                    (3, abs(ecp_mull_charges[25,3] - model_OO_ecp_charges_25[3])), 
+                    (4, abs(ecp_mull_charges[25,4] - model_OO_ecp_charges_25[4])), 
+                    (5, abs(ecp_mull_charges[25,5] - model_OO_ecp_charges_25[5])), 
+                    (6, abs(ecp_mull_charges[25,6] - model_OO_ecp_charges_25[6]))  
                 ]
             ),
-            "node[] at (5.75,-0.65) {\\fontsize{8pt}{8pt}\\selectfont \$\\Delta L = "*string(round(react_coord[30],digits=3))*"\\ \\mathring{\\mathrm{A}}\$}",
+            "node[] at (5.75,0.15) {\\fontsize{8pt}{8pt}\\selectfont \$\\Delta L = "*string(round(react_coord[25],digits=3))*"\\ \\mathring{\\mathrm{A}}\$}",
         )
     )
 
@@ -805,15 +679,15 @@ else
             ybar = 0,
             "bar width = 5.5pt",
             xlabel = L"$\mathrm{Atom \ Number}$",
-            ymin = -1.0,
-            ymax = 0.5,
+            ymin = 0.0,
+            ymax = 0.2,
             xmin = 0.25,
             xmax = 6.75,
             width = 230, 
             height = 85,
             xtick = "1,2,3,4,5,6",
             xticklabels =  L"$1$,$2$,$3$,$4$,$5$,$6$",
-            ytick = "-1.0,-0.5,0.0,0.5",
+            ytick = "0.0,0.1,0.2",
             yticklabels = "\\empty",
             "xtick align = inside",
             "grid = both",
@@ -823,12 +697,12 @@ else
             {fill = theme_palette(:auto)[1]},
             Coordinates(
                 [
-                    (1, fulle_mull_charges[60,1]), 
-                    (2, fulle_mull_charges[60,2]), 
-                    (3, fulle_mull_charges[60,3]), 
-                    (4, fulle_mull_charges[60,4]), 
-                    (5, fulle_mull_charges[60,5]), 
-                    (6, fulle_mull_charges[60,6])  
+                    (1, abs(fulle_mull_charges[55,1] - model_OO_fulle_charges_55[1])), 
+                    (2, abs(fulle_mull_charges[55,2] - model_OO_fulle_charges_55[2])), 
+                    (3, abs(fulle_mull_charges[55,3] - model_OO_fulle_charges_55[3])), 
+                    (4, abs(fulle_mull_charges[55,4] - model_OO_fulle_charges_55[4])), 
+                    (5, abs(fulle_mull_charges[55,5] - model_OO_fulle_charges_55[5])), 
+                    (6, abs(fulle_mull_charges[55,6] - model_OO_fulle_charges_55[6]))  
                 ]
             )
         ),
@@ -836,42 +710,16 @@ else
             {fill = theme_palette(:auto)[2]},
             Coordinates(
                 [
-                    (1, model_fulle_charges_60[1]), 
-                    (2, model_fulle_charges_60[2]), 
-                    (3, model_fulle_charges_60[3]), 
-                    (4, model_fulle_charges_60[4]), 
-                    (5, model_fulle_charges_60[5]), 
-                    (6, model_fulle_charges_60[6])  
-                ]
-            )
-        ),
-        Plot(
-            {fill = theme_palette(:auto)[3]},
-            Coordinates(
-                [
-                    (1, ecp_mull_charges[60,1]), 
-                    (2, ecp_mull_charges[60,2]), 
-                    (3, ecp_mull_charges[60,3]), 
-                    (4, ecp_mull_charges[60,4]), 
-                    (5, ecp_mull_charges[60,5]), 
-                    (6, ecp_mull_charges[60,6])  
-                ]
-            )
-        ),
-        Plot(
-            {fill = theme_palette(:auto)[4]},
-            Coordinates(
-                [
-                    (1, model_ecp_charges_60[1]), 
-                    (2, model_ecp_charges_60[2]), 
-                    (3, model_ecp_charges_60[3]), 
-                    (4, model_ecp_charges_60[4]), 
-                    (5, model_ecp_charges_60[5]), 
-                    (6, model_ecp_charges_60[6])  
+                    (1, abs(ecp_mull_charges[55,1] - model_OO_ecp_charges_55[1])), 
+                    (2, abs(ecp_mull_charges[55,2] - model_OO_ecp_charges_55[2])), 
+                    (3, abs(ecp_mull_charges[55,3] - model_OO_ecp_charges_55[3])), 
+                    (4, abs(ecp_mull_charges[55,4] - model_OO_ecp_charges_55[4])), 
+                    (5, abs(ecp_mull_charges[55,5] - model_OO_ecp_charges_55[5])), 
+                    (6, abs(ecp_mull_charges[55,6] - model_OO_ecp_charges_55[6]))  
                 ]
             ),
-            "node[] at (5.75,-0.65) {\\fontsize{8pt}{8pt}\\selectfont \$\\Delta L = "*string(round(react_coord[60],digits=3))*"\\ \\mathring{\\mathrm{A}}\$}",
-        )
+            "node[] at (5.75,0.15) {\\fontsize{8pt}{8pt}\\selectfont \$\\Delta L = "*string(round(react_coord[55],digits=3))*"\\ \\mathring{\\mathrm{A}}\$}",
+        ),
     )
 end
 

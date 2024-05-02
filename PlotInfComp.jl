@@ -54,20 +54,27 @@ PGFPlotsX.CUSTOM_PREAMBLE = [PGFPlotsX.CUSTOM_PREAMBLE; "\\usepackage[fontsize=1
 
 @pgf Axis(
     {
-        "legend pos = north east",
+        # "legend pos = north east",
+        legend_style =
+        {
+            at = Coordinate(0.5, 0.85),
+            anchor = "north",
+            anchor = "center",
+            legend_columns = 2
+        },
         xmajorgrids,
         ymajorgrids,
         xmin = 0,
         xmax = 3,
-        ymin = -10,
+        ymin = -20,
         ymax = 40,
         xtick = "{0,1,2,3}",
-        ytick = "{-10,0,10,20,30,40}",
-        xlabel = L"$d$",
+        ytick = "{-20,0,20,40}",
+        xlabel = L"$d \ \left[ \mathrm{Bohr} \right]$",
         ylabel = L"$\displaystyle \sum^K_{k = 1} \frac{\left( - 1 \right)^k \mathrm{XC}_\mathrm{AB}^{\mathrm{EN} \left( k \right)}}{\left( "*
             L"2 k \right)! \exp \left( - \lambda d^2 \right)}$",
-        width = 300, 
-        height = 150,
+        width = 200, 
+        height = 115,
         "grid style={line width=.1pt, draw=gray!10},major grid style={line width=.2pt,draw=gray!25}",
     },
     Plot(
@@ -86,6 +93,6 @@ PGFPlotsX.CUSTOM_PREAMBLE = [PGFPlotsX.CUSTOM_PREAMBLE; "\\usepackage[fontsize=1
         },
         Coordinates((0:(length(f1_data)-1)).*(3.0/(length(f1_data)-1)),f2_data),
     ),
-    LegendEntry({anchor = "west"},L"\fontsize{8pt}{8pt}\selectfont $K = 100$"),
+    LegendEntry({anchor = "west"},L"\fontsize{8pt}{8pt}\selectfont $K = 100 \hspace{0.35cm}$"),
     LegendEntry({anchor = "west"},L"\fontsize{8pt}{8pt}\selectfont $K = 10$")
 )

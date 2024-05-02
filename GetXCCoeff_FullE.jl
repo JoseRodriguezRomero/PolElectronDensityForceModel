@@ -5,7 +5,26 @@ if nworkers() != 11
 end
 
 @everywhere include("GetPotentialFromAngles.jl")
-@everywhere include("ProcessFittingData.jl")
+
+@everywhere function ReadGaussianFile(file_name::String, method::String)
+    # Reads the energy of the Gaussian file
+    energy = 1E30;
+
+    for line in eachline(file_name)
+        if method == "DFT"
+            if contains(line,"E(RB3LYP)")
+                energy = parse(Float64,split(line)[5]);
+            end
+        elseif method == "CCSD(T)"
+            if contains(line,"CCSD(T)= ")
+                aux_str = split(line)[end];
+                energy = parse(Float64,replace(aux_str, "D" => "E", count = 1));
+            end
+        end
+    end
+
+    return energy;
+end
 
 @everywhere H2O_gauss_e0 = ReadGaussianFile("Training Data/Gaussian Data/FullE/H2O.log","CCSD(T)");
 

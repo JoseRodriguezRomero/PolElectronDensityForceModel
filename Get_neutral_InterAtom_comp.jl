@@ -360,7 +360,7 @@ fg1 = @pgf Axis(
         ymin = -600,
         ymax = 600,
         xtick = "0.5,1,1.5,2,2.5,3",
-        ytick = "-600,-200,200,600",
+        ytick = "-600,0,600",
         xticklabels = "\\empty",
         ylabel = L"\Delta E \ \left[ \mathrm{kJ/mol} \right]",
         "grid style={line width=.1pt, draw=gray!10},major grid style={line width=.2pt,draw=gray!25}",
@@ -372,7 +372,7 @@ fg1 = @pgf Axis(
             color = theme_palette(:auto)[1],
         },
         Coordinates(H2_CCSDT_dist,H2_CCSDT_energy),
-        "node[anchor=center] at (3.25,-400) {\\fontsize{8pt}{8pt}\\selectfont \\color{black} \$ \\mathrm{H} + \\mathrm{H} \$}",
+        "node[anchor=center] at (3.25,-300) {\\fontsize{8pt}{8pt}\\selectfont \\color{black} \$ \\mathrm{H} + \\mathrm{H} \$}",
     ),
     Plot(
         {
@@ -425,8 +425,8 @@ fg2 = @pgf Axis(
         ymax = 2000,
         xtick = "0.5,1,1.5,2,2.5,3",
         xticklabels = "\\empty",
-        ytick = "-2000,-1000,0,1000,2000",
-        yticklabels = L"$-2000$,$-1000$,$0$,$1000$,$2000$",
+        ytick = "-2000,0,2000",
+        yticklabels = L"$-2000$,$0$,$2000$",
         ylabel = L"\Delta E \ \left[ \mathrm{kJ/mol} \right]",
         "grid style={line width=.1pt, draw=gray!10},major grid style={line width=.2pt,draw=gray!25}",
     },
@@ -437,7 +437,7 @@ fg2 = @pgf Axis(
             color = theme_palette(:auto)[1],
         },
         Coordinates(N2_CCSDT_dist,N2_CCSDT_energy),
-        "node[anchor=center] at (3.25,1500) {\\fontsize{8pt}{8pt}\\selectfont \\color{black} \$ \\mathrm{N} + \\mathrm{N} \$}",
+        "node[anchor=center] at (3.25,1000) {\\fontsize{8pt}{8pt}\\selectfont \\color{black} \$ \\mathrm{N} + \\mathrm{N} \$}",
     ),
     Plot(
         {
@@ -487,8 +487,8 @@ fg3 = @pgf Axis(
         ymax = 4000,
         xtick = "0.5,1,1.5,2,2.5,3",
         xticklabels = "\\empty",
-        ytick = "-4000,-2000,0,2000,4000",
-        yticklabels = L"$-4000$,$-2000$,$0$,$2000$,$4000$",
+        ytick = "-4000,0,4000",
+        yticklabels = L"$-4000$,$0$,$4000$",
         ylabel = L"\Delta E \ \left[ \mathrm{kJ/mol} \right]",
         "grid style={line width=.1pt, draw=gray!10},major grid style={line width=.2pt,draw=gray!25}",
     },
@@ -499,7 +499,7 @@ fg3 = @pgf Axis(
             color = theme_palette(:auto)[1],
         },
         Coordinates(O2_CCSDT_dist,O2_CCSDT_energy),
-        "node[anchor=center] at (3.25,3000) {\\fontsize{8pt}{8pt}\\selectfont \\color{black} \$ \\mathrm{O} + \\mathrm{O} \$}",
+        "node[anchor=center] at (3.25,2000) {\\fontsize{8pt}{8pt}\\selectfont \\color{black} \$ \\mathrm{O} + \\mathrm{O} \$}",
     ),
     Plot(
         {
@@ -541,17 +541,17 @@ fg4 = @pgf Axis(
         },
         xmajorgrids,
         ymajorgrids,
-        "ymode = log",
+        # "ymode = log",
         width = 280, 
         height = 100,
         xmin = 0.5,
         xmax = 3.5,
-        ymin = 1.0E-2,
-        ymax = 1.0E10,
+        ymin = -3000,
+        ymax = 3009.0,
         xtick = "0.5,1,1.5,2,2.5,3,3.5",
         xticklabels = L"$0.5$,$1.0$,$1.5$,$2.0$,$2.5$,$3.0$,$3.5$",
-        ytick = "1.09E-2,1.0E2,1.0E6,1.0E10",
-        yticklabels = L"$10^{-2}$,$10^{2}$,$10^{6}$,$10^{10}$",
+        ytick = "-3000,0,3000",
+        yticklabels = L"$-3000$,$0$,$3000$",
         ylabel = L"\Delta E \ \left[ \mathrm{kJ/mol} \right]",
         xlabel = L"\Delta L \ \left[ \mathring{\mathrm{A}} \right]",
         "grid style={line width=.1pt, draw=gray!10},major grid style={line width=.2pt,draw=gray!25}",
@@ -563,7 +563,7 @@ fg4 = @pgf Axis(
             color = theme_palette(:auto)[1],
         },
         Coordinates(B_Ar_CCSDT_dist,B_Ar_CCSDT_energy),
-        "node[anchor=center] at (3.25,1.0E4) {\\fontsize{8pt}{8pt}\\selectfont \\color{black} \$ \\mathrm{B} + \\mathrm{Ar} \$}",
+        "node[anchor=center] at (3.25,1500) {\\fontsize{8pt}{8pt}\\selectfont \\color{black} \$ \\mathrm{B} + \\mathrm{Ar} \$}",
     ),
     Plot(
         {
@@ -572,22 +572,14 @@ fg4 = @pgf Axis(
             color = theme_palette(:auto)[2],
         },
         Coordinates(B_Ar_ecp_model_dist,B_Ar_ecp_model_energy),
-    ),
-    Plot(
-        {
-            "no marks",
-            style = {"thick"},
-            color = theme_palette(:auto)[3],
-        },
-        Coordinates(B_Ar_fulle_model_dist,B_Ar_fulle_model_energy),
-    ),
+    )
 );
 
 px = 3.25;
 py = -750 + 0.85*(6000-(-750));
 annotate!(px,py,text("B + Ar",:center,:center,8));
 
-pAll = plot(p1,p2,p3,p4,layout=grid(4,1,heights=(0.31,0.24,0.24,0.23)));
+pAll = plot(p1,p2,p3,p4,layout=grid(4,1,heights=(0.31,0.23,0.23,0.23)));
 plot!(size=(600,550))
 
 FG = @pgf GroupPlot({group_style = { group_size = "1 by 4"}},fg1,fg2,fg3,fg4);

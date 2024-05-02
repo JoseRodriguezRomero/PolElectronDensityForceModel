@@ -1,4 +1,4 @@
-using Plots, SpecialFunctions, LaTeXStrings
+using Plots, SpecialFunctions, LaTeXStrings, PGFPlotsX
 include("GetPotentialFromAngles.jl")
 
 function GetEnergyFromLogFile(file_name::String)
@@ -158,7 +158,7 @@ ECP_order = ceil(Int,length(model1_xc_coeffs_ECP)/4.0) - 1;
 FullE_order = ceil(Int,length(model1_xc_coeffs_FullE)/4.0) - 1;
 
 bond_θ = -(π/2.0)*(13.0/25.0);
-str_react_coord = "OH";
+str_react_coord = "OO";
 
 for i in 0:199
     if str_react_coord == "OH"
@@ -185,7 +185,7 @@ surf_energy .-= 2.0*e0;
 
 # model1_coord = (react_coord./a0);
 model1_coord = zeros(Float64,801,1);
-model1_coord[:] = 1.5 .+ collect(0:800).*(9.0/800.0);
+model1_coord[:] = 1.0 .+ collect(0:800).*(9.0/800.0);
 
 if str_react_coord == "OH"
     t = time();
@@ -253,14 +253,14 @@ FullE_model1_e += FullE_xc_model1*model1_xc_coeffs_FullE;
 model1_coord .*= a0;
 kjmol = 2625.5002;
 
-ECP_H2O = [ReadMolecule("H2O_ecp_fitted_data.txt",Float64)];
+ECP_H2O = [ReadMolecule("H2O_ecp_fitted_data.txt")];
 PolarizeMolecules!(ECP_H2O,model1_xc_coeffs_ECP_Pol);
 
 ECP_e0 = NaiveEnergyFromDensity(ECP_H2O);
 ECP_e0 += dot(XCEnergyFromDensity(ECP_H2O,ECP_order),model1_xc_coeffs_ECP);
 ECP_model1_e .-= 2.0*ECP_e0;
 
-FullE_H2O = [ReadMolecule("H2O_fullE_fitted_data.txt",Float64)];
+FullE_H2O = [ReadMolecule("H2O_fullE_fitted_data.txt")];
 PolarizeMolecules!(FullE_H2O,model1_xc_coeffs_FullE_Pol);
 
 FullE_e0 = NaiveEnergyFromDensity(FullE_H2O);
@@ -354,6 +354,9 @@ PGFPlotsX.CUSTOM_PREAMBLE = [PGFPlotsX.CUSTOM_PREAMBLE; "\\usepackage[fontsize=1
 # PGFPlotsX.CUSTOM_PREAMBLE = [PGFPlotsX.CUSTOM_PREAMBLE; "\\usepackage{fontspec}"];
 # PGFPlotsX.CUSTOM_PREAMBLE = [PGFPlotsX.CUSTOM_PREAMBLE; "\\usepackage[fontsize=10pt]{fontsize}"];
 
+aux_cond_ecp = (abs.(ECP_model1_e) .< 4000);
+aux_cond_fulle = (abs.(FullE_model1_e) .< 4000);
+
 if str_react_coord == "OO"
     fp1 = @pgf Axis(
         {
@@ -384,7 +387,8 @@ if str_react_coord == "OO"
                 style = {"thick"},
                 no_marks,
             },
-            Coordinates(model1_coord[:],ECP_model1_e[:]),
+            Coordinates(model1_coord[aux_cond_ecp][:],
+                ECP_model1_e[aux_cond_ecp][:]),
         ),
         Plot(
             {
@@ -392,7 +396,8 @@ if str_react_coord == "OO"
                 no_marks,
                 style = {"thick"},
             },
-            Coordinates(model1_coord[:],FullE_model1_e[:]),
+            Coordinates(model1_coord[aux_cond_fulle][:],
+                FullE_model1_e[aux_cond_fulle][:]),
         ),
         Plot(
             {
@@ -402,8 +407,8 @@ if str_react_coord == "OO"
             },
             Coordinates(react_coord,surf_energy),
         ),
-        LegendEntry({anchor = "west"},L"\fontsize{8pt}{8pt}\selectfont $\mathrm{This \ Work \ (ECP \ fit)}$"),
-        LegendEntry({anchor = "west"},L"\fontsize{8pt}{8pt}\selectfont $\mathrm{This \ Work \ (Full \ E. \ fit)}$"),
+        LegendEntry({anchor = "west"},L"\fontsize{8pt}{8pt}\selectfont $\mathrm{This \ Work \ (ECP \ variant)}$"),
+        LegendEntry({anchor = "west"},L"\fontsize{8pt}{8pt}\selectfont $\mathrm{This \ Work \ (Full \ electron \ variant)}$"),
         LegendEntry({anchor = "west"},L"\fontsize{8pt}{8pt}\selectfont $\mathrm{CCSD(T)/cc\text{-}pVTZ}$")
     )
 elseif str_react_coord == "OH"
@@ -429,7 +434,8 @@ elseif str_react_coord == "OH"
                 style = {"thick"},
                 no_marks,
             },
-            Coordinates(model1_coord[:],ECP_model1_e[:]),
+            Coordinates(model1_coord[aux_cond_ecp][:],
+                ECP_model1_e[aux_cond_ecp][:]),
         ),
         Plot(
             {
@@ -437,7 +443,8 @@ elseif str_react_coord == "OH"
                 no_marks,
                 style = {"thick"},
             },
-            Coordinates(model1_coord[:],FullE_model1_e[:]),
+            Coordinates(model1_coord[aux_cond_fulle][:],
+                FullE_model1_e[aux_cond_fulle][:]),
         ),
         Plot(
             {
@@ -470,7 +477,8 @@ elseif str_react_coord == "OH"
                 style = {"thick"},
                 no_marks,
             },
-            Coordinates(model1_coord[:],ECP_model1_e[:]),
+            Coordinates(model1_coord[aux_cond_ecp][:],
+                ECP_model1_e[aux_cond_ecp][:]),
         ),
         Plot(
             {
@@ -478,7 +486,8 @@ elseif str_react_coord == "OH"
                 no_marks,
                 style = {"thick"},
             },
-            Coordinates(model1_coord[:],FullE_model1_e[:]),
+            Coordinates(model1_coord[aux_cond_fulle][:],
+                FullE_model1_e[aux_cond_fulle][:]),
         ),
         Plot(
             {
@@ -516,7 +525,7 @@ F1 = @pgf Axis(
             no_marks,
         },
         Coordinates([0],[0]),
-        "node[] at (0.5,0.5) {\\includegraphics{/Users/joseantoniorodriguesromero/Documents/GitHub/PolarizedElectronDensityForceModel/H2O_OH_diag.pdf}}"
+        "node[] at (0.5,0.5) {\\includegraphics{/Users/joseantoniorodriguesromero/Documents/GitHub/PolElectronDensityForceModel/H2O_OH_diag.pdf}}"
     ),
 )
 
@@ -540,7 +549,7 @@ F2 = @pgf Axis(
             no_marks,
         },
         Coordinates([0],[0]),
-        "node[] at (0.5,0.5) {\\includegraphics{/Users/joseantoniorodriguesromero/Documents/GitHub/PolarizedElectronDensityForceModel/H2O_OO_diag.pdf}}"
+        "node[] at (0.5,0.5) {\\includegraphics{/Users/joseantoniorodriguesromero/Documents/GitHub/PolElectronDensityForceModel/H2O_OO_diag.pdf}}"
     ),
 )
 

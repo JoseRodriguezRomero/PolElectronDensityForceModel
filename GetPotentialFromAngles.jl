@@ -122,12 +122,12 @@ function XCOrder0(λ::Vector,l::Vector)
     if abs(l[1]) < 1.0E-6
         return 2*sqrt(λ[1]/π);
     else
-        return erf(l[1]sqrt(λ[1]))/l[1];
+        return erf(l[1]*sqrt(λ[1]))/l[1];
     end
 end
 
 function XCOrder1(λ::Vector)
-    return -((4*λ[1]^(3/2))/sqrt(π))
+    return -((4*λ[1]^(3/2))/sqrt(π));
 end
 
 function XCOrder2(λ::Vector,l::Vector)
@@ -191,7 +191,7 @@ function XCOrderD00(λ::Vector,l::Vector)
     if abs(l[1]) < 1.0E-8
         return 0.0;
     else
-        return 2*l[1]sqrt(λ[1])/(sqrt(π)*l[2]);
+        return 2*l[1]*sqrt(λ[1])/(sqrt(π)*l[2]);
     end
 end
 
@@ -199,7 +199,7 @@ function XCOrderD01(λ::Vector,l::Vector)
     if abs(l[1]) < 1.0E-8
         return 0.0;
     else
-        return -sqrt(π)*erf(l[1]sqrt(λ[1]))/(sqrt(π)*l[2]);;
+        return -sqrt(π)*erf(l[1]*sqrt(λ[1]))/(sqrt(π)*l[2]);
     end
 end
 
@@ -446,6 +446,13 @@ function PolarizeMolecules!(molecules::Vector,xc_coeffs::Vector)
                     aux_dist -= molecule2.cloud_data[j,1:3];
                     aux_dist = norm(aux_dist);
 
+                    ii0 = molec_ind_base[ii] + ceil(Int,i/clouds_per_atom) - 1;
+                    jj0 = molec_ind_base[jj] + ceil(Int,j/clouds_per_atom) - 1;
+
+                    if (ii0 == jj0) && (ii == jj)
+                        c1 *= 2.0;
+                    end
+
                     C1 = copy(c1);
                     c1 *= exp(-λ*(aux_dist^2.0));
 
@@ -454,8 +461,6 @@ function PolarizeMolecules!(molecules::Vector,xc_coeffs::Vector)
 
                     λ = zeros(aux_type,22) .+ λ;
                     λ = λ .^ collect(1:22);
-
-                    ii0 = molec_ind_base[ii] + ceil(Int,i/clouds_per_atom) - 1;
 
                     # Naive contribution
                     aux_Y[ii0] += C1*c2*XCOrder0(λ,aux_dist);
@@ -544,6 +549,7 @@ function PolarizeMolecules!(molecules::Vector,xc_coeffs::Vector)
                     for k_order in 1:(order+1)
                         xc_coeff_1 = xc_coeffs[1*(order+1)+k_order];
                         xc_coeff_2 = xc_coeffs[3*(order+1)+k_order];
+                        
                         if k_order == 1
                             aux_M[ii0,jj0] += C1*c2*xc_coeff_1*XCOrder0(λ,aux_dist);
                             aux_M[ii0,jj0] += C1*c2*xc_coeff_2*XCOrderD01(λ,aux_dist);
@@ -586,9 +592,8 @@ function PolarizeMolecules!(molecules::Vector,xc_coeffs::Vector)
     end
 
     aux_Y[1:(end-1)] .*= -1.0;
-    aux_X = aux_M \ aux_Y;
-
     # display(hcat(aux_M,aux_Y));
+    aux_X = aux_M \ aux_Y;
 
     for ii in eachindex(molecules)
         ii0 = molec_ind_base[ii];
@@ -623,6 +628,7 @@ function NaiveEnergyFromDensity(molecules::Vector{Molecule})
         molecule1 = molecules[ii];
         num_atoms1 = size(molecule1.atoms_data)[1];
         num_clouds1 = size(molecule1.cloud_data)[1];
+        clouds_per_atom = ceil(Int,num_clouds1/num_atoms1);
 
         # Intramolecular interactions
         # nuclei-nuclei
@@ -677,6 +683,12 @@ function NaiveEnergyFromDensity(molecules::Vector{Molecule})
 
                 if (c1 == 0) || (c2 == 0)
                     continue;
+                end
+
+                ii0 = ceil(Int,i/clouds_per_atom);
+                jj0 = ceil(Int,j/clouds_per_atom);
+                if (ii0 == jj0) && (i != j)
+                    c1 *= 2.0;
                 end
 
                 λ = (λ1*λ2)/(λ1+λ2);
@@ -822,6 +834,7 @@ function XCEnergyFromDensity(molecules::Vector{Molecule},order::Int)
         molecule1 = molecules[ii];
         num_atoms1 = size(molecule1.atoms_data)[1];
         num_clouds1 = size(molecule1.cloud_data)[1];
+        clouds_per_atom = ceil(Int,num_clouds1/num_atoms1);
 
         # Intramolecular interactions
         # nuclei-cloud 
@@ -900,6 +913,12 @@ function XCEnergyFromDensity(molecules::Vector{Molecule},order::Int)
 
                 if (c1 == 0) || (c2 == 0)
                     continue;
+                end
+
+                ii0 = ceil(Int,i/clouds_per_atom);
+                jj0 = ceil(Int,j/clouds_per_atom);
+                if (ii0 == jj0) && (i != j)
+                    c1 *= 2.0;
                 end
 
                 λ = (λ1*λ2)/(λ1+λ2);

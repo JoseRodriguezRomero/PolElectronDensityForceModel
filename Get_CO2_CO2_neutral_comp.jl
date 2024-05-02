@@ -5,21 +5,21 @@ kjmol = 2625.5002;
 a0 = 0.529177210903;
 kCalMol_to_Hartree = 0.0015936011;
 
-# PGFPlotsX.CUSTOM_PREAMBLE = [PGFPlotsX.DEFAULT_PREAMBLE; "\\usepackage[bitstream-charter]{mathdesign}"];
-# PGFPlotsX.CUSTOM_PREAMBLE = [PGFPlotsX.CUSTOM_PREAMBLE; "\\usepackage{amsmath,mathtools,accents}"];
-# PGFPlotsX.CUSTOM_PREAMBLE = [PGFPlotsX.CUSTOM_PREAMBLE; "\\usepackage{accents}"];
-# PGFPlotsX.CUSTOM_PREAMBLE = [PGFPlotsX.CUSTOM_PREAMBLE; "\\usepackage[utf8]{inputenc}"];
-# PGFPlotsX.CUSTOM_PREAMBLE = [PGFPlotsX.CUSTOM_PREAMBLE; "\\usepackage[T1]{fontenc}"];
-# PGFPlotsX.CUSTOM_PREAMBLE = [PGFPlotsX.CUSTOM_PREAMBLE; "\\usepackage{fontspec}"];
-# PGFPlotsX.CUSTOM_PREAMBLE = [PGFPlotsX.CUSTOM_PREAMBLE; "\\usepackage[fontsize=10pt]{fontsize}"];
-
-PGFPlotsX.CUSTOM_PREAMBLE = [PGFPlotsX.DEFAULT_PREAMBLE; "\\usepackage{amsmath,accents}"];
+PGFPlotsX.CUSTOM_PREAMBLE = [PGFPlotsX.DEFAULT_PREAMBLE; "\\usepackage[bitstream-charter]{mathdesign}"];
+PGFPlotsX.CUSTOM_PREAMBLE = [PGFPlotsX.CUSTOM_PREAMBLE; "\\usepackage{amsmath,mathtools,accents}"];
 PGFPlotsX.CUSTOM_PREAMBLE = [PGFPlotsX.CUSTOM_PREAMBLE; "\\usepackage{accents}"];
 PGFPlotsX.CUSTOM_PREAMBLE = [PGFPlotsX.CUSTOM_PREAMBLE; "\\usepackage[utf8]{inputenc}"];
 PGFPlotsX.CUSTOM_PREAMBLE = [PGFPlotsX.CUSTOM_PREAMBLE; "\\usepackage[T1]{fontenc}"];
 PGFPlotsX.CUSTOM_PREAMBLE = [PGFPlotsX.CUSTOM_PREAMBLE; "\\usepackage{fontspec}"];
-PGFPlotsX.CUSTOM_PREAMBLE = [PGFPlotsX.CUSTOM_PREAMBLE; "\\usepackage{mathptmx}"];
 PGFPlotsX.CUSTOM_PREAMBLE = [PGFPlotsX.CUSTOM_PREAMBLE; "\\usepackage[fontsize=10pt]{fontsize}"];
+
+# PGFPlotsX.CUSTOM_PREAMBLE = [PGFPlotsX.DEFAULT_PREAMBLE; "\\usepackage{amsmath,accents}"];
+# PGFPlotsX.CUSTOM_PREAMBLE = [PGFPlotsX.CUSTOM_PREAMBLE; "\\usepackage{accents}"];
+# PGFPlotsX.CUSTOM_PREAMBLE = [PGFPlotsX.CUSTOM_PREAMBLE; "\\usepackage[utf8]{inputenc}"];
+# PGFPlotsX.CUSTOM_PREAMBLE = [PGFPlotsX.CUSTOM_PREAMBLE; "\\usepackage[T1]{fontenc}"];
+# PGFPlotsX.CUSTOM_PREAMBLE = [PGFPlotsX.CUSTOM_PREAMBLE; "\\usepackage{fontspec}"];
+# PGFPlotsX.CUSTOM_PREAMBLE = [PGFPlotsX.CUSTOM_PREAMBLE; "\\usepackage{mathptmx}"];
+# PGFPlotsX.CUSTOM_PREAMBLE = [PGFPlotsX.CUSTOM_PREAMBLE; "\\usepackage[fontsize=10pt]{fontsize}"];
 
 function ReadXCCoeffs(file_name::String)
     # Reads the XC coefficients from the specified text file. The file is 
@@ -60,17 +60,17 @@ dist_CO2_CO2_MMFF94S_data = 1.0 .+ ((4.0/100.0).*collect(0:100));
 CO2_CO2_MMFF94S_data = CO2_CO2_MMFF94S_data[2:end] .- 2.0*CO2_CO2_MMFF94S_data[1];
 CO2_CO2_MMFF94S_data .*= kjmol*kCalMol_to_Hartree;
 
-# MB-Pol Data
-CO2_CO2_MBPol_data = zeros(Float64,0);
-for line in readlines("Test Data/MB-Pol Data/Neutral/CO2+CO2/MB-Pol_energies.txt")
+# MB-nrg Data
+CO2_CO2_MBnrg_data = zeros(Float64,0);
+for line in readlines("Test Data/MB-nrg Data/Neutral/CO2+CO2/MB-nrg_energies.txt")
     if length(split(line)) > 2
-        push!(CO2_CO2_MBPol_data,parse(Float64,split(line)[end]));
+        push!(CO2_CO2_MBnrg_data,parse(Float64,split(line)[end]));
     end
 end
 
-dist_CO2_CO2_MBPol_data = 1.0 .+ ((4.0/100.0).*collect(0:100));
-CO2_CO2_MBPol_data = CO2_CO2_MBPol_data[2:end] .- 2.0*CO2_CO2_MBPol_data[1];
-CO2_CO2_MBPol_data .*= kjmol*kCalMol_to_Hartree*6.3;
+dist_CO2_CO2_MBnrg_data = 1.0 .+ ((4.0/100.0).*collect(0:100));
+CO2_CO2_MBnrg_data = CO2_CO2_MBnrg_data[2:end] .- 2.0*CO2_CO2_MBnrg_data[1];
+CO2_CO2_MBnrg_data .*= kjmol*kCalMol_to_Hartree*6.3;
 
 # Gaussian Data
 function ReadGaussianEnergy(file_name::String)
@@ -121,7 +121,7 @@ CO2_CO2_ecp_model_data[1:3:end] = model_ecp_data;
 
 p1 = plot(dist_CO2_CO2_GAFF_data,CO2_CO2_GAFF_data[1:3:end],label="GAFF");
 plot!(dist_CO2_CO2_MMFF94S_data,CO2_CO2_MMFF94S_data[1:3:end],label="MMFF94S");
-plot!(dist_CO2_CO2_MMFF94S_data,CO2_CO2_MBPol_data[1:3:end],label="MB-Pol (×6.3)");
+plot!(dist_CO2_CO2_MMFF94S_data,CO2_CO2_MBnrg_data[1:3:end],label="MB-nrg (×6.3)");
 plot!(dist_CO2_CO2_CCSDT_data,CO2_CO2_CCSDT_data[1:3:end],label="CCSD(T)/cc-pVTZ ");
 plot!(dist_ecp_model,model_ecp_data,label="This Work (ECP Fit)");
 plot!(ylims=(-2,2));
@@ -145,10 +145,10 @@ fg1 = @pgf Axis(
         height = 100,
         xmin = 2.75,
         xmax = 5,
-        ymin = -2,
-        ymax = 2,
+        ymin = -10,
+        ymax = 20,
         xtick = "3,3.5,4,4.5,5",
-        ytick = "-2,0,2",
+        # ytick = "-15,-5,5",
         xticklabels = "\\empty",
         ylabel = L"\Delta E \ \left[ \mathrm{kJ/mol} \right]",
         "grid style={line width=.1pt, draw=gray!10},major grid style={line width=.2pt,draw=gray!25}",
@@ -159,8 +159,8 @@ fg1 = @pgf Axis(
             style = {"thick"},
             color = theme_palette(:auto)[1],
         },
-        Coordinates(dist_ecp_model[model_ecp_data .< 10],model_ecp_data[model_ecp_data .< 10]),
-        "node[anchor=center] at (4.75,-1) {\\fontsize{8pt}{8pt}\\selectfont \\color{black} \$ \\theta = 0 \$}",
+        Coordinates(dist_ecp_model[model_ecp_data .< 40],model_ecp_data[model_ecp_data .< 40]),
+        "node[anchor=center] at (4.75,-5) {\\fontsize{8pt}{8pt}\\selectfont \\color{black} \$ \\theta = 0 \$}",
     ),
     Plot(
         {
@@ -184,12 +184,12 @@ fg1 = @pgf Axis(
             style = {"thick"},
             color = theme_palette(:auto)[4],
         },
-        Coordinates(dist_CO2_CO2_MBPol_data[CO2_CO2_MBPol_data[1:3:end] .< 5.0],CO2_CO2_MBPol_data[1:3:end][CO2_CO2_MBPol_data[1:3:end] .< 5.0]),
+        Coordinates(dist_CO2_CO2_MBnrg_data[CO2_CO2_MBnrg_data[1:3:end] .< 5.0],CO2_CO2_MBnrg_data[1:3:end][CO2_CO2_MBnrg_data[1:3:end] .< 5.0]),
     ),
     LegendEntry({anchor = "west"},L"\fontsize{8pt}{8pt}\selectfont $\mathrm{This \ Work \ (ECP \ fit)}$"),
     LegendEntry({anchor = "west"},L"\fontsize{8pt}{8pt}\selectfont $\mathrm{GAFF}$"),
     LegendEntry({anchor = "west"},L"\fontsize{8pt}{8pt}\selectfont $\mathrm{CCSD(T)/cc\text{-}pVTZ}$"),
-    LegendEntry({anchor = "west"},L"\fontsize{8pt}{8pt}\selectfont $\mathrm{MB\text{-}Pol} \ \left(\times 6.3 \right)$"),
+    LegendEntry({anchor = "west"},L"\fontsize{8pt}{8pt}\selectfont $\mathrm{MB\text{-}nrg} \ \left(\times 6.3 \right)$"),
 );
 
 # θ = π/4
@@ -209,7 +209,7 @@ CO2_CO2_ecp_model_data[2:3:end] = model_ecp_data;
 
 p2 = plot(dist_CO2_CO2_GAFF_data,CO2_CO2_GAFF_data[2:3:end]);
 plot!(dist_CO2_CO2_MMFF94S_data,CO2_CO2_MMFF94S_data[2:3:end]);
-plot!(dist_CO2_CO2_MMFF94S_data,CO2_CO2_MBPol_data[2:3:end]);
+plot!(dist_CO2_CO2_MMFF94S_data,CO2_CO2_MBnrg_data[2:3:end]);
 plot!(dist_CO2_CO2_CCSDT_data,CO2_CO2_CCSDT_data[2:3:end]);
 plot!(dist_ecp_model,model_ecp_data);
 plot!(ylims=(-2,2));
@@ -233,10 +233,10 @@ fg2 = @pgf Axis(
         height = 100,
         xmin = 2.75,
         xmax = 5,
-        ymin = -2,
-        ymax = 2,
+        ymin = -10,
+        ymax = 20,
         xtick = "3,3.5,4,4.5,5",
-        ytick = "-2,0,2",
+        # ytick = "-10,0,10,20",
         xticklabels = "\\empty",
         ylabel = L"\Delta E \ \left[ \mathrm{kJ/mol} \right]",
         "grid style={line width=.1pt, draw=gray!10},major grid style={line width=.2pt,draw=gray!25}",
@@ -247,8 +247,8 @@ fg2 = @pgf Axis(
             style = {"thick"},
             color = theme_palette(:auto)[1],
         },
-        Coordinates(dist_ecp_model[model_ecp_data .< 10],model_ecp_data[model_ecp_data .< 10]),
-        "node[anchor=center] at (4.75,-1) {\\fontsize{8pt}{8pt}\\selectfont \\color{black} \$ \\theta = \\pi / 4 \$}",
+        Coordinates(dist_ecp_model[model_ecp_data .< 40],model_ecp_data[model_ecp_data .< 40]),
+        "node[anchor=center] at (4.75,-5) {\\fontsize{8pt}{8pt}\\selectfont \\color{black} \$ \\theta = \\pi / 4 \$}",
     ),
     Plot(
         {
@@ -272,7 +272,7 @@ fg2 = @pgf Axis(
             style = {"thick"},
             color = theme_palette(:auto)[4],
         },
-        Coordinates(dist_CO2_CO2_MBPol_data[CO2_CO2_MBPol_data[2:3:end] .< 5.0],CO2_CO2_MBPol_data[2:3:end][CO2_CO2_MBPol_data[2:3:end] .< 5.0]),
+        Coordinates(dist_CO2_CO2_MBnrg_data[CO2_CO2_MBnrg_data[2:3:end] .< 5.0],CO2_CO2_MBnrg_data[2:3:end][CO2_CO2_MBnrg_data[2:3:end] .< 5.0]),
     ),
 );
 
@@ -293,7 +293,7 @@ CO2_CO2_ecp_model_data[3:3:end] = model_ecp_data;
 
 p3 = plot(dist_CO2_CO2_GAFF_data,CO2_CO2_GAFF_data[3:3:end]);
 plot!(dist_CO2_CO2_MMFF94S_data,CO2_CO2_MMFF94S_data[3:3:end]);
-plot!(dist_CO2_CO2_MMFF94S_data,CO2_CO2_MBPol_data[3:3:end]);
+plot!(dist_CO2_CO2_MMFF94S_data,CO2_CO2_MBnrg_data[3:3:end]);
 plot!(dist_CO2_CO2_CCSDT_data,CO2_CO2_CCSDT_data[3:3:end]);
 plot!(dist_ecp_model,model_ecp_data);
 plot!(ylims=(-20,0));
@@ -317,9 +317,9 @@ fg3 = @pgf Axis(
         height = 100,
         xmin = 2.75,
         xmax = 5,
-        ymin = -15,
-        ymax = 5,
-        ytick = "-15,-5,5",
+        ymin = -20,
+        ymax = 10,
+        # ytick = "-15,-5,5",
         xtick = "3,3.5,4,4.5,5",
         xticklabels = L"$3.0$,$3.5$,$4.0$,$4.5$,$5.0$",
         ylabel = L"\Delta E \ \left[ \mathrm{kJ/mol} \right]",
@@ -333,7 +333,7 @@ fg3 = @pgf Axis(
             color = theme_palette(:auto)[1],
         },
         Coordinates(dist_ecp_model[model_ecp_data .< 10],model_ecp_data[model_ecp_data .< 10]),
-        "node[anchor=center] at (4.75,-10) {\\fontsize{8pt}{8pt}\\selectfont \\color{black} \$ \\theta = \\pi / 2 \$}",
+        "node[anchor=center] at (4.75,-15) {\\fontsize{8pt}{8pt}\\selectfont \\color{black} \$ \\theta = \\pi / 2 \$}",
     ),
     Plot(
         {
@@ -357,7 +357,7 @@ fg3 = @pgf Axis(
             style = {"thick"},
             color = theme_palette(:auto)[4],
         },
-        Coordinates(dist_CO2_CO2_MBPol_data[CO2_CO2_MBPol_data[2:3:end] .< 5.0],CO2_CO2_MBPol_data[2:3:end][CO2_CO2_MBPol_data[2:3:end] .< 5.0]),
+        Coordinates(dist_CO2_CO2_MBnrg_data[CO2_CO2_MBnrg_data[2:3:end] .< 5.0],CO2_CO2_MBnrg_data[2:3:end][CO2_CO2_MBnrg_data[2:3:end] .< 5.0]),
     ),
 );
 
@@ -374,7 +374,7 @@ scatter!(CO2_CO2_CCSDT_data,CO2_CO2_MMFF94S_data,label="MMFF94S");
 scatter!(CO2_CO2_CCSDT_data,CO2_CO2_GAFF_data,label="GAFF");
 plot!(xlims=(-100,3000),ylims=(-100,3000));
 plot!([-3000,3000],[-3000,3000],label=false);
-scatter!(CO2_CO2_CCSDT_data,CO2_CO2_MBPol_data,label="MB-Pol (×6.3)");
+scatter!(CO2_CO2_CCSDT_data,CO2_CO2_MBnrg_data,label="MB-nrg (×6.3)");
 plot!(legend=:bottomright);
 plot!(xlabel="CCSD(T)/cc-pVTZ\n[kJ/mol]");
 plot!(xguidefontsize=8);
@@ -400,7 +400,7 @@ F = @pgf Axis(
             no_marks,
         },
         Coordinates([0],[0]),
-        "node[] at (0.5,4.5) {\\includegraphics{/Users/joseantoniorodriguesromero/Documents/GitHub/PolarizedElectronDensityForceModel/CO2+CO2_diag.pdf}}"
+        "node[] at (0.5,4.5) {\\includegraphics{/Users/joseantoniorodriguesromero/Documents/GitHub/PolElectronDensityForceModel/CO2+CO2_diag.pdf}}"
     ),
 );
 
@@ -455,7 +455,7 @@ fp4 = @pgf Axis(
             mark = "*",
             "mark options" = {"fill" = theme_palette(:auto)[5]},
         },
-        Table([CO2_CO2_CCSDT_data[:],CO2_CO2_MBPol_data[:]])
+        Table([CO2_CO2_CCSDT_data[:],CO2_CO2_MBnrg_data[:]])
     ),
     Plot(
         {
@@ -467,7 +467,7 @@ fp4 = @pgf Axis(
     LegendEntry({anchor = "west"},L"\fontsize{8pt}{8pt}\selectfont $\mathrm{This \ Work}$"),
     LegendEntry({anchor = "west"},L"\fontsize{8pt}{8pt}\selectfont $\mathrm{MMFF94S}$"),
     LegendEntry({anchor = "west"},L"\fontsize{8pt}{8pt}\selectfont $\mathrm{GAFF}$"),
-    LegendEntry({anchor = "west"},L"\fontsize{8pt}{8pt}\selectfont $\mathrm{MB\text{-}Pol} \ \left( \times 6.3 \right)$"),
-);
+    LegendEntry({anchor = "west"},L"\fontsize{8pt}{8pt}\selectfont $\mathrm{MB\text{-}nrg} \ \left( \times 6.3 \right)$"),
+)
 
 # @pgf GroupPlot({group_style = { group_size = "2 by 2", "vertical sep = 1.5cm","horizontal sep = 1.5cm"}}, fp1, fp2, fp3, fp4)

@@ -6,11 +6,65 @@ end
 
 @everywhere using ForwardDiff, Random
 @everywhere include("GetPotentialFromAngles.jl")
-@everywhere include("ProcessFittingData.jl")
 
 @everywhere all_H2O_H2O_gauss_e = zeros(Float64,10000,1);
 @everywhere all_H2O_H2O_charges = zeros(Float64,10000,6);
 @everywhere all_H2O_H2O_angs_and_disps = zeros(Float64,10000,6);
+
+@everywhere function ReadGaussianFile(file_name::String, method::String)
+    # Reads the energy of the Gaussian file
+    energy = 1E30;
+
+    for line in eachline(file_name)
+        if method == "DFT"
+            if contains(line,"E(RB3LYP)")
+                energy = parse(Float64,split(line)[5]);
+            end
+        elseif method == "CCSD(T)"
+            if contains(line,"CCSD(T)= ")
+                aux_str = split(line)[end];
+                energy = parse(Float64,replace(aux_str, "D" => "E", count = 1));
+            end
+        end
+    end
+
+    return energy;
+end
+
+@everywhere function ReadGaussianMullikenCharges(file_name::String)
+    # Returns a vector with the Mulliken charges of each atom, in the 
+    # same order as given in the Gaussian input file, from the Gaussian 
+    # logfile.
+    charges = zeros(Float64,0);
+
+    fileID = open(file_name);
+    lines = readlines(fileID);
+
+    for i in eachindex(lines)
+        line = lines[i];
+        
+        if contains(line,"Mulliken charges:")
+            j = 2;
+            while true
+                line = lines[i+j];
+
+                if contains(line,"Sum of Mulliken charges =")
+                    break
+                end
+
+                line_splitted = split(line);
+                charge =  parse(Float64,line_splitted[end]);
+                push!(charges,charge)
+                j += 1;
+            end
+
+            break; 
+        end
+    end
+
+    close(fileID);
+    return charges;
+end
 
 # OH Coord
 @everywhere all_angs_and_disps_data = readlines("Training Data/Gaussian Data/FullE/OH Coord/RotationsAndDisplacements.txt");
@@ -170,6 +224,10 @@ X0 = zeros(Float64,4);
 
 FullE_result = optimize(RandFoo, X0, NelderMead(), 
     Optim.Options(show_trace = true));
+X0 = Optim.minimizer(FullE_result);
+
+FullE_result = optimize(RandFoo,X0, autodiff = :forward,
+    LBFGS(), Optim.Options(show_trace = true));
 X0 = Optim.minimizer(FullE_result);
 
 FullE_result = optimize(Foo, X0, NelderMead(), 
